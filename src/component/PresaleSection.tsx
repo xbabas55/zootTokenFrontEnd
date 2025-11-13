@@ -1,13 +1,17 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import axios from "axios"
+import { BuyToken } from '../web3/web3';
+import { useWallet, WalletContextState } from '@solana/wallet-adapter-react';
+import { BN } from '@coral-xyz/anchor';
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 const PresaleSection: React.FC = () => {
   const [solAmount, setSolAmount] = useState<number | string>('');
   const [zootAmount, setZootAmount] = useState<number | string>(0);
-  const [walletConnected, setWalletConnected] = useState<boolean>(false);
-
-  const exchangeRate = 1_000_000; // 1 SOL = 1,000,000 ZOOT
-
+  const [wallStatus, setStatusText] = useState<boolean>(false)
+  const exchangeRate = 1_000_000_000; // 1 SOL = 1,000,000 ZOOT
+  const wallet: WalletContextState = useWallet();
   // Update calculated ZOOT amount whenever SOL input changes
   useEffect(() => {
     if (solAmount && Number(solAmount) > 0) {
@@ -15,19 +19,44 @@ const PresaleSection: React.FC = () => {
     } else {
       setZootAmount(0);
     }
-  }, [solAmount]);
+
+
+    // 🪙 Update UI when wallet connection changes
+    if (wallet.connecting) {
+      setStatusText(false);
+    } else if (wallet.connected) {
+      setStatusText(true);
+    } else {
+      setStatusText(false);
+    }
+
+  }, [solAmount , wallet.connected, wallet.connecting]);
 
   const handleBuy = () => {
-    if (!walletConnected) {
+    if (!wallet.connected) {
       alert('Please connect your wallet first!');
       return;
     }
-    alert(`Buying ${zootAmount} ZOOT for ${solAmount} SOL`);
+    
+
+    const sol = Number(solAmount) * LAMPORTS_PER_SOL;
+    alert(`Buying ZOOT for ${solAmount} SOL`);
+    BuyToken(wallet, new BN(sol));
+
+    // axios.post('http://170.205.30.221:5000/tokenomics/buyZoot', {
+    //   sol: solAmount,
+    //   pubkey: publicKey
+    // }).then((res) => {
+    //   console.log('Response:', res.data);
+    // })
+    //   .catch((err) => {
+    //     console.error('Error:', err);
+    //   });
   };
 
   const handleConnectWallet = () => {
     // TODO: Replace with real wallet connect logic
-    setWalletConnected(true);
+   wallet.connect();
   };
 
   return (
@@ -146,13 +175,13 @@ const PresaleSection: React.FC = () => {
               <div className="wallet-status flex items-center gap-2 text-gray-600 border border-dashed border-gray-400 rounded-md p-3">
                 <span>💰</span>
                 <span>
-                  {walletConnected
+                  {wallStatus
                     ? 'Wallet Connected'
                     : 'Connect your wallet to continue'}
                 </span>
               </div>
 
-              {!walletConnected ? (
+              {!wallStatus ? (
                 <button
                   className="btn btn-secondary w-full bg-gray-800 text-white py-2 rounded-md"
                   onClick={handleConnectWallet}

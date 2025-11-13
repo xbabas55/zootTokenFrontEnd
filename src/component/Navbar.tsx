@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { Connection, PublicKey, clusterApiUrl, SystemProgram, Transaction, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 const Navbar: React.FC = () => {
   useEffect(() => {
@@ -102,11 +104,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Wallet Button */}
-        <button className="wallet-btn" id="connectWallet">
-          <i className="fas fa-wallet"></i>
-          Connect Wallet
-        </button>
-
+        <WalletMultiButton />
         {/* Hamburger (mobile) */}
         <div className="hamburger" id="hamburger">
           <span></span>
