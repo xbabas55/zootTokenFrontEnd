@@ -15,23 +15,21 @@ const Tokenomics: React.FC = () => {
       type: "doughnut",
       data: {
         labels: [
-          "Presale (40%)",
-          "Liquidity (25%)",
-          "Marketing (15%)",
-          "Team (10%)",
-          "Rewards (5%)",
-          "Charity (5%)",
+          "Presale(15%)",
+          "Exchange Listing Reserve (55%)",
+          "Marketing(20%)",
+          "Team(5%)",
+          "Staking & LP (5%)",
         ],
         datasets: [
           {
-            data: [40, 25, 15, 10, 5, 5],
+            data: [15, 55, 20, 5, 5],
             backgroundColor: [
               "#ff6b6b",
               "#4ecdc4",
               "#45b7d1",
               "#f9ca24",
               "#a55eea",
-              "#2ecc71",
             ],
             borderWidth: 1,
           },
@@ -43,7 +41,7 @@ const Tokenomics: React.FC = () => {
           legend: {
             position: "bottom" as const,
             labels: {
-              color: "#fff",
+              color: "#000000ff",
               font: {
                 size: 14,
                 weight: 500 as const, // ✅ fixed type-safe value
@@ -74,50 +72,43 @@ const Tokenomics: React.FC = () => {
             <div className="detail-card">
               <div className="detail-color" style={{ background: "#ff6b6b" }}></div>
               <div className="detail-info">
-                <h4>Presale (40%)</h4>
-                <p>400,000,000 ZOOT</p>
+                <h4>Presale Holders (15%)</h4>
+                <p>150,000,000 ZOOT</p>
               </div>
             </div>
 
             <div className="detail-card">
               <div className="detail-color" style={{ background: "#4ecdc4" }}></div>
               <div className="detail-info">
-                <h4>Liquidity (25%)</h4>
-                <p>250,000,000 ZOOT</p>
+                <h4>Exchange Listing Reserve (55%)</h4>
+                <p>550,000,000 ZOOT</p>
               </div>
             </div>
 
             <div className="detail-card">
               <div className="detail-color" style={{ background: "#45b7d1" }}></div>
               <div className="detail-info">
-                <h4>Marketing (15%)</h4>
-                <p>150,000,000 ZOOT</p>
+                <h4>Marketing & Community (20%)</h4>
+                <p>200,000,000 ZOOT</p>
               </div>
             </div>
 
             <div className="detail-card">
               <div className="detail-color" style={{ background: "#f9ca24" }}></div>
               <div className="detail-info">
-                <h4>Team (10%)</h4>
-                <p>100,000,000 ZOOT</p>
+                <h4>Team (5%)</h4>
+                <p>50,000,000 ZOOT</p>
               </div>
             </div>
 
             <div className="detail-card">
               <div className="detail-color" style={{ background: "#a55eea" }}></div>
               <div className="detail-info">
-                <h4>Rewards (5%)</h4>
+                <h4>Staking & LP (5%)</h4>
                 <p>50,000,000 ZOOT</p>
               </div>
             </div>
 
-            <div className="detail-card">
-              <div className="detail-color" style={{ background: "#2ecc71" }}></div>
-              <div className="detail-info">
-                <h4>Charity (5%)</h4>
-                <p>50,000,000 ZOOT</p>
-              </div>
-            </div>
           </div>
         </div>
 

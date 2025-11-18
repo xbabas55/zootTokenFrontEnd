@@ -6,6 +6,7 @@ import { useWallet, WalletContextState } from '@solana/wallet-adapter-react';
 import { BN } from '@coral-xyz/anchor';
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
+
 const PresaleSection: React.FC = () => {
   const [solAmount, setSolAmount] = useState<number | string>('');
   const [zootAmount, setZootAmount] = useState<number | string>(0);
@@ -13,51 +14,48 @@ const PresaleSection: React.FC = () => {
   const exchangeRate = 1_000_000_000; // 1 SOL = 1,000,000 ZOOT
   const wallet: WalletContextState = useWallet();
   // Update calculated ZOOT amount whenever SOL input changes
-  useEffect(() => {
-    if (solAmount && Number(solAmount) > 0) {
-      setZootAmount(Number(solAmount) * exchangeRate);
-    } else {
-      setZootAmount(0);
-    }
+  // useEffect(() => {
+  //   if (solAmount && Number(solAmount) > 0) {
+  //     setZootAmount(Number(solAmount) * exchangeRate);
+  //   } else {
+  //     setZootAmount(0);
+  //   }
 
 
-    // 🪙 Update UI when wallet connection changes
-    if (wallet.connecting) {
-      setStatusText(false);
-    } else if (wallet.connected) {
-      setStatusText(true);
-    } else {
-      setStatusText(false);
-    }
+  //   // 🪙 Update UI when wallet connection changes
+  //   if (wallet.connecting) {
+  //     setStatusText(false);
+  //   } else if (wallet.connected) {
+  //     setStatusText(true);
+  //   } else {
+  //     setStatusText(false);
+  //   }
 
-  }, [solAmount , wallet.connected, wallet.connecting]);
+  // }, [solAmount , wallet.connected, wallet.connecting]);
 
-  const handleBuy = () => {
+  const handleBuy =  () => {
+
     if (!wallet.connected) {
       alert('Please connect your wallet first!');
       return;
     }
+   
     
 
     const sol = Number(solAmount) * LAMPORTS_PER_SOL;
-    alert(`Buying ZOOT for ${solAmount} SOL`);
     BuyToken(wallet, new BN(sol));
-
-    // axios.post('http://170.205.30.221:5000/tokenomics/buyZoot', {
-    //   sol: solAmount,
-    //   pubkey: publicKey
-    // }).then((res) => {
-    //   console.log('Response:', res.data);
-    // })
-    //   .catch((err) => {
-    //     console.error('Error:', err);
-    //   });
   };
 
-  const handleConnectWallet = () => {
-    // TODO: Replace with real wallet connect logic
-   wallet.connect();
-  };
+  const buy= async ()=>{
+    
+  }
+
+
+
+  // const handleConnectWallet = () => {
+  //   // TODO: Replace with real wallet connect logic
+  //  wallet.connect();
+  // };
 
   return (
     <section id="presale" className="presale py-16">
@@ -138,72 +136,21 @@ const PresaleSection: React.FC = () => {
           </div>
 
           {/* Right: Presale Widget */}
-          <div className="presale-widget border border-gray-300 rounded-xl shadow-md p-6 bg-white">
+          {/* <div className="presale-widget border border-gray-300 rounded-xl shadow-md p-6 bg-white">
             <div className="widget-header text-center mb-6">
               <h3 className="text-xl font-semibold">Buy ZOOT Tokens</h3>
               <div className="current-rate text-gray-600 mt-1">
                 1 SOL = 1,000,000 ZOOT
               </div>
+              <h1 className="text-xl font-semibold">Presale Wallet Address </h1>
+              <h3 className="text-xl font-semibold">8TpCLxSiv77XqvLtNf6GiWb9KcszYxCBshx2395L5TK9 </h3>
+              <p> To buy token. Send sol to presale wallet address. Token will be send you when presale end.</p>
+
             </div>
 
-            <div className="widget-body space-y-4">
-              <div className="input-group">
-                <label className="block text-sm font-medium">Amount (SOL)</label>
-                <input
-                  type="number"
-                  value={solAmount}
-                  onChange={(e) => setSolAmount(e.target.value)}
-                  placeholder="0.0"
-                  min="0.1"
-                  step="0.1"
-                  className="w-full border border-gray-300 rounded-md p-2"
-                />
-              </div>
 
-              <div className="text-center text-gray-400 text-xl">⇅</div>
-
-              <div className="input-group">
-                <label className="block text-sm font-medium">You will receive (ZOOT)</label>
-                <input
-                  type="text"
-                  value={zootAmount}
-                  readOnly
-                  className="w-full border border-gray-300 rounded-md p-2 bg-gray-100"
-                />
-              </div>
-
-              <div className="wallet-status flex items-center gap-2 text-gray-600 border border-dashed border-gray-400 rounded-md p-3">
-                <span>💰</span>
-                <span>
-                  {wallStatus
-                    ? 'Wallet Connected'
-                    : 'Connect your wallet to continue'}
-                </span>
-              </div>
-
-              {!wallStatus ? (
-                <button
-                  className="btn btn-secondary w-full bg-gray-800 text-white py-2 rounded-md"
-                  onClick={handleConnectWallet}
-                >
-                  Connect Wallet
-                </button>
-              ) : (
-                <button
-                  className="btn btn-primary w-full bg-blue-600 text-white py-2 rounded-md"
-                  onClick={handleBuy}
-                  disabled={!solAmount}
-                >
-                  Buy ZOOT Tokens
-                </button>
-              )}
-
-              <div className="presale-info-small text-sm text-gray-500 mt-2">
-                <p>ℹ️ Minimum purchase: 0.1 SOL</p>
-                <p>🛡️ Smart contract audited</p>
-              </div>
-            </div>
-          </div>
+          </div> */}
+          { PresaleWallet()}
         </div>
       </div>
     </section>
@@ -212,3 +159,32 @@ const PresaleSection: React.FC = () => {
 
 export default PresaleSection;
 
+export function PresaleWallet() {
+  return (
+
+      <div className="max-w-xl w-full bg-gray-900 rounded-2xl shadow-lg p-8 space-y-6">
+        <h1 className="text-3xl font-bold text-gray-100 text-center">Presale Wallet Address</h1>
+
+        <div className="bg-gray-800 rounded-xl p-4 border border-gray-200">
+          <p className="text-sm text-gray-300 mb-2">Send SOL to this wallet:</p>
+          <p className="text-lg font-mono font-semibold break-all text-gray-200">
+            8TpCLxSiv77XqvLtNf6GiWb9KcszYxCBshx2395L5TK9
+          </p>
+        </div>
+
+        <p className="text-gray-300 text-center">
+          To buy tokens, send SOL to the presale wallet address. Tokens will be
+          automatically sent to you when the presale ends.
+        </p>
+
+        <div className="flex justify-center">
+          <button
+            className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow-md hover:bg-blue-700 transition-all"
+            onClick={() => navigator.clipboard.writeText("8TpCLxSiv77XqvLtNf6GiWb9KcszYxCBshx2395L5TK9")}
+          >
+            Copy Wallet Address
+          </button>
+        </div>
+      </div>
+  );
+}

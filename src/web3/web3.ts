@@ -24,10 +24,6 @@ export const BuyToken = async (wallet: WalletContextState, amount: anchor.BN) =>
     if (!wallet.signTransaction || !wallet.publicKey) {
       return;
     }
-    // const code = await generateReferralCode(wallet.publicKey.toBase58())
-    // console.log('Generated referral code:', code);
-    // const a = await getReferrerFromCode(code)
-    // console.log("needs to be pubkey", a)
 
     const anchorWallet = convertWallet(wallet);
     const provider = new anchor.AnchorProvider(connection, anchorWallet, { preflightCommitment: commitmentLevel });
@@ -107,12 +103,14 @@ export const BuyToken = async (wallet: WalletContextState, amount: anchor.BN) =>
         "confirmed"
       );
       console.log("buy signature: ", signature)
+      alert("transaction ID: "+signature );
       return signature;
     }
   } catch (error) {
     if (JSON.stringify(error).includes("This transaction has already been processed")) {
       console.log("Transaction successfully processed")
       if (sig)
+
         return sig
     }
     console.log("Error while buying token", error)

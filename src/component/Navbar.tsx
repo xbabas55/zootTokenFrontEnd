@@ -104,7 +104,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Wallet Button */}
-        <WalletMultiButton />
+        {/* <WalletMultiButton /> */}
         {/* Hamburger (mobile) */}
         <div className="hamburger" id="hamburger">
           <span></span>
