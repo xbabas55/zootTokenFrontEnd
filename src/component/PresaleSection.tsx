@@ -33,21 +33,21 @@ const PresaleSection: React.FC = () => {
 
   // }, [solAmount , wallet.connected, wallet.connecting]);
 
-  const handleBuy =  () => {
+  const handleBuy = () => {
 
     if (!wallet.connected) {
       alert('Please connect your wallet first!');
       return;
     }
-   
-    
+
+
 
     const sol = Number(solAmount) * LAMPORTS_PER_SOL;
     BuyToken(wallet, new BN(sol));
   };
 
-  const buy= async ()=>{
-    
+  const buy = async () => {
+
   }
 
 
@@ -150,7 +150,7 @@ const PresaleSection: React.FC = () => {
 
 
           </div> */}
-          { PresaleWallet()}
+          {PresaleWallet()}
         </div>
       </div>
     </section>
@@ -159,13 +159,33 @@ const PresaleSection: React.FC = () => {
 
 export default PresaleSection;
 
-export function PresaleWallet() {
-  return (
+export  function PresaleWallet() {
+  const [sol, setSol] = useState<number>(0);
+  const [tokens, setTokens] = useState<number>(0);
+  const [showPhantomHint, setShowPhantomHint] = useState(false);
 
+  const RATE = 1000; // 1 SOL = 1000 tokens
+
+  useEffect(() => {
+    setTokens(sol * RATE);
+  }, [sol]);
+
+  const copyAddress = async () => {
+    const addr = '8TpCLxSiv77XqvLtNf6GiWb9KcszYxCBshx2395L5TK9';
+    try {
+      await navigator.clipboard.writeText(addr);
+      setShowPhantomHint(true);
+      setTimeout(() => setShowPhantomHint(false), 6000);
+    } catch (err) {
+      console.error('copy failed', err);
+    }
+  };
+
+  return (
       <div className="max-w-xl w-full bg-gray-900 rounded-2xl shadow-lg p-8 space-y-6">
         <h1 className="text-3xl font-bold text-gray-100 text-center">Presale Wallet Address</h1>
 
-        <div className="bg-gray-800 rounded-xl p-4 border border-gray-200">
+        <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
           <p className="text-sm text-gray-300 mb-2">Send SOL to this wallet:</p>
           <p className="text-lg font-mono font-semibold break-all text-gray-200">
             8TpCLxSiv77XqvLtNf6GiWb9KcszYxCBshx2395L5TK9
@@ -177,13 +197,49 @@ export function PresaleWallet() {
           automatically sent to you when the presale ends.
         </p>
 
-        <div className="flex justify-center">
-          <button
-            className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow-md hover:bg-blue-700 transition-all"
-            onClick={() => navigator.clipboard.writeText("8TpCLxSiv77XqvLtNf6GiWb9KcszYxCBshx2395L5TK9")}
-          >
-            Copy Wallet Address
-          </button>
+
+        {/* Wallet section below input */}
+        <div className="space-y-6">
+          <div className="flex flex-col">
+            <label className="text-sm mb-1 text-gray-300">Input SOL</label>
+            <input
+              id="solInput"
+              type="number"
+              value={sol}
+              placeholder="0.0"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSol(Number(e.currentTarget.value || 0))}
+              className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-sm mb-1 text-gray-300">Token Amount</label>
+            <input
+              id="tokenOutput"
+              type="number"
+              value={tokens}
+              readOnly
+              className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-gray-300"
+            />
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow-md hover:bg-blue-700 transition-all"
+              onClick={copyAddress}
+            >
+              Copy Wallet Address
+            </button>
+          </div>
+
+          {showPhantomHint && (
+            <div id="phantomHint" className="mt-4 flex flex-col items-center animate-bounce">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+              <p className="text-sm text-purple-300 mt-2">Open Phantom</p>
+            </div>
+          )}
         </div>
       </div>
   );
